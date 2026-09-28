@@ -1,0 +1,13 @@
+# 由 `pip install openjiuwen fastapi uvicorn opentelemetry-sdk opentelemetry-exporter-otlp-proto-http` 实测安装（Python 3.12）
+# 说明：
+# - openjiuwen 底座本体（0.1.x），基础依赖较重（transformers 等），完整安装即可；
+# - opentelemetry-sdk / opentelemetry-exporter-otlp-proto-http 不在 openjiuwen 默认依赖里，
+#   但 extensions/observability（init_observability）运行时需要，须显式安装；
+# - 只用到底座官方的 OTLP protobuf 依赖做 import 兼容，实际发往平台的是
+#   otlp_json_exporter.py 手写序列化的 OTLP/HTTP JSON（平台只解析 JSON）。
+openjiuwen>=0.1.18,<0.2
+fastapi>=0.115
+uvicorn>=0.30
+opentelemetry-sdk>=1.30
+opentelemetry-exporter-otlp-proto-http>=1.30
+requests>=2.31

@@ -1,0 +1,135 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: agentops-platform
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+  datasource:
+    url: jdbc:h2:mem:agentops;MODE=MySQL;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=USER,ROLE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+# 本地开发用简单 token 认证：token 即 userId，用户表来自配置；生产替换为行内 IAM 实现。
+agentops:
+  # 权限注册审计排除前缀：机器通道（OTLP 接收 / 告警 webhook）与治理运行时面（invoke/mcp-check/agent-auth）
+  # 由各自机器身份机制校验，不走 @RequirePermission
+  permission:
+    audit-exclude-prefixes: /v1/otlp,/v1/alerts/webhook,/v1/invoke,/v1/mcp-check,/v1/agent-auth
+  # 观测模块机器通道（/v1/otlp/**、/v1/alerts/webhook）X-Platform-Token 校验；未配置时拒绝服务
+  observability:
+    machine-token: dev-machine-token
+  auth:
+    # 平台管理员清单：权限矩阵管理（roles/update）等高危平台级操作仅管理员可用
+    admins:
+      - u1001
+    users:
+      u1001:
+        displayName: 张三
+        groupIds: []
+      u1002:
+        displayName: 李四
+        groupIds: []
+      u1003:
+        displayName: 王五
+        groupIds: []
+      u1004:
+        displayName: 赵六
+        groupIds: []
+      u1005:
+        displayName: 钱七
+        groupIds: []
+      u1006:
+        displayName: 孙八
+        groupIds: []
+  # 资产文件上传存储目录：{dir}/{assetId}/{version}/{filename}
+  asset-upload:
+    dir: data/uploads
+  # CMDB 集成：mock 连接器内置应用表（生产替换为行内 CMDB HTTP 连接器）；
+  # stale-threshold-hours 为 STALE 动态判定阈值；resync-job-enabled 为定时重同步预留开关（本期不实现）。
+  cmdb:
+    stale-threshold-hours: 24
+    resync-job-enabled: false
+    mock-apps:
+      APP-CORE-001:
+        app-name: 核心账务系统
+        owner: 张核心
+        biz-domain: 账务域
+        app-level: A
+        status: ACTIVE
+      APP-CRM-002:
+        app-name: 客户关系系统
+        owner: 李客户
+        biz-domain: 零售域
+        app-level: B
+        status: ACTIVE
+      APP-RISK-003:
+        app-name: 风控决策系统
+        owner: 王风控
+        biz-domain: 风险域
+        app-level: A
+        status: ACTIVE
+      # 已下线应用：绑定负向测试用
+      APP-LEGACY-099:
+        app-name: 历史报表系统
+        owner: 赵报表
+        biz-domain: 数据域
+        app-level: C
+        status: DISABLED
+  # 制品交付：executor 选择部署执行器（local=本地桩，默认 / openjiuwen=agent-runtime HTTP 骨架，
+  # 需配置 openjiuwen.runtime-base-url，否则执行器构造即报错）；
+  # level-profiles 为 Agent 等级 → 运行保障参数映射（副本数/资源限制/健康检查），deploy 按 levelSnapshot 取用。
+  delivery:
+    executor: local
+    openjiuwen:
+      runtime-base-url: ""
+    level-profiles:
+      P0:
+        replicas: 4
+        cpu: "4"
+        memory: 8Gi
+        health-check-path: /health
+        health-check-interval-seconds: 10
+      P1:
+        replicas: 2
+        cpu: "2"
+        memory: 4Gi
+        health-check-path: /health
+        health-check-interval-seconds: 15
+      P2:
+        replicas: 1
+        cpu: "1"
+        memory: 2Gi
+        health-check-path: /health
+        health-check-interval-seconds: 30
+      P3:
+        replicas: 1
+        cpu: "0.5"
+        memory: 1Gi
+        health-check-path: /health
+        health-check-interval-seconds: 60
+
+logging:
+  level:
+    com.bosc.agentops: info

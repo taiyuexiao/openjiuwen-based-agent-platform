@@ -1,0 +1,289 @@
+:root {
+  --brand: #2B5AED;
+  --brand-hover: #4A73F1;
+  --brand-soft: rgba(43, 90, 237, 0.08);
+  --success: #1FA97A;
+  --warning: #E58E0B;
+  --error: #E5484D;
+  --text-primary: #1B2130;
+  --text-secondary: #59617A;
+  --text-tertiary: #98A0B4;
+  --border-light: #EBEEF5;
+  --bg-layout: #F4F6FB;
+  --shadow-card: 0 1px 2px rgba(23, 43, 99, 0.04), 0 4px 14px rgba(23, 43, 99, 0.05);
+  --shadow-card-hover: 0 8px 24px rgba(23, 43, 99, 0.12);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  margin: 0;
+  background: var(--bg-layout);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ---------- 卡片 ---------- */
+.soft-card {
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-light);
+  transition: box-shadow 180ms var(--ease-standard), transform 180ms var(--ease-standard);
+}
+
+/* 统计卡片：hover 抬升 */
+.stat-card {
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms var(--ease-standard), box-shadow 180ms var(--ease-standard);
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* 广场卡片 */
+.square-card {
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  height: 100%;
+  overflow: hidden;
+  transition: transform 180ms var(--ease-standard), box-shadow 180ms var(--ease-standard);
+}
+.square-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+.square-card .square-card-actions {
+  opacity: 0;
+  transition: opacity 160ms var(--ease-standard);
+}
+.square-card:hover .square-card-actions {
+  opacity: 1;
+}
+
+/* 广场卡片顶部渐变 Banner */
+.square-banner {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  color: #fff;
+}
+.square-banner-brand { background: linear-gradient(120deg, #2B5AED 0%, #6C8BFF 100%); }
+.square-banner-purple { background: linear-gradient(120deg, #5B45D6 0%, #9B8BFF 100%); }
+.square-banner-teal { background: linear-gradient(120deg, #0E8A84 0%, #3EC6BC 100%); }
+.square-banner-orange { background: linear-gradient(120deg, #D96E0B 0%, #FFB066 100%); }
+
+/* ---------- 侧边栏 ---------- */
+.sider-logo {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 10px;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.sider-logo .logo-name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sider-logo .logo-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 菜单项过渡 + 选中 pill 光效 + 左指示条 */
+.ant-layout-sider .ant-menu-item {
+  transition: background 160ms var(--ease-standard), color 160ms var(--ease-standard);
+  position: relative;
+}
+.ant-layout-sider .ant-menu-item-selected {
+  box-shadow: 0 4px 14px rgba(43, 90, 237, 0.45);
+}
+.ant-layout-sider .ant-menu-item-selected::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: #8FA8FF;
+}
+.ant-layout-sider .ant-menu-submenu-title {
+  transition: color 160ms var(--ease-standard);
+}
+.sider-group-label {
+  padding: 14px 20px 6px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.32);
+  user-select: none;
+}
+.sider-collapse-btn {
+  position: absolute;
+  right: -14px;
+  top: 74px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  z-index: 20;
+  transition: transform 160ms var(--ease-standard);
+}
+.sider-collapse-btn:hover {
+  transform: scale(1.08);
+}
+
+/* ---------- 顶栏毛玻璃 ---------- */
+.app-header {
+  backdrop-filter: saturate(1.6) blur(12px);
+  -webkit-backdrop-filter: saturate(1.6) blur(12px);
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(235, 238, 245, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ---------- 页面切换淡入 ---------- */
+.page-fade {
+  animation: page-fade-in 200ms var(--ease-standard);
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 登录页 ---------- */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+}
+.login-brand {
+  flex: 1.2;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, #0B1437 0%, #16266B 55%, #2B5AED 130%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 7vw;
+}
+.login-brand::before {
+  /* 网格 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at 30% 40%, black 30%, transparent 75%);
+}
+.login-brand .glow-a,
+.login-brand .glow-b {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+.login-brand .glow-a {
+  width: 420px; height: 420px;
+  background: rgba(92, 128, 255, 0.35);
+  top: -120px; right: -80px;
+}
+.login-brand .glow-b {
+  width: 360px; height: 360px;
+  background: rgba(43, 90, 237, 0.4);
+  bottom: -140px; left: -100px;
+}
+.login-brand .brand-content { position: relative; z-index: 1; }
+.login-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 40px;
+}
+@media (max-width: 900px) {
+  .login-brand { display: none; }
+}
+
+/* ---------- 微交互 ---------- */
+.ant-btn {
+  transition: all 160ms var(--ease-standard);
+}
+.ant-btn-primary:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* 表格行 hover 已由 theme Table.rowHoverBg 统一；分页器间距 */
+.ant-pagination {
+  margin-top: 4px;
+}
+
+/* 状态徽标（柔和：浅色底 + 深色字 + 圆点） */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.status-badge .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 详情页头 Hero 卡 */
+.detail-hero {
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+/* 滚动条精修 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #CBD2E0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #AEB8CC; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* 侧边栏分组小标题 */
+.ant-layout-sider .ant-menu-item-group-title {
+  font-size: 11px !important;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.32) !important;
+  padding: 16px 20px 6px !important;
+  line-height: 1.4 !important;
+}
+/* 收起时隐藏分组标题 */
+.ant-layout-sider-collapsed .ant-menu-item-group-title {
+  display: none;
+}
